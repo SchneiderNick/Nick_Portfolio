@@ -1,0 +1,40 @@
+
+Sub Timesheet_Compliance(Tower As String, ResourceManager As String)
+
+Dim strbody As String
+
+Dim Counter As Integer
+Dim NameLocation As String
+Dim HourLocation As String
+
+Dim strFile_Path As String
+strFile_Path = "####################"
+    
+Counter = 14
+NameLocation = "E" & Counter
+HourLocation = "T" & Counter
+
+ActiveWorkbook.SlicerCaches("Slicer_Tower").VisibleSlicerItemsList = Array( _
+        "[Resources].[Tower].&[" & Tower & "]")
+ActiveWorkbook.SlicerCaches("Slicer_ResourceManager").VisibleSlicerItemsList = _
+        Array( _
+        "[Resources].[ResourceManager].&[" & ResourceManager & "]")
+
+Do While ActiveWorkbook.Sheets("TimeSheet Compliance").Range(NameLocation).Value <> ""
+
+    If ActiveWorkbook.Sheets("TimeSheet Compliance").Range(HourLocation).Value = "" Then
+
+        strbody = strbody + ActiveWorkbook.Sheets("TimeSheet Compliance").Range(NameLocation).Value & vbNewLine
+
+    End If
+
+    Counter = Counter + 1
+    NameLocation = "E" & Counter
+    HourLocation = "T" & Counter
+Loop
+Open strFile_Path For Append As #1
+Write #1, strbody
+Close #1
+        
+End Sub
+
